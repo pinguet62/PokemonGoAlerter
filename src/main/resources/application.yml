@@ -1,0 +1,12 @@
+# Facebook login
+facebook:
+    email: TODO
+    password: TODO
+
+# Proxy
+#http:
+#    proxyHost: TODO
+#    proxyPort: TODO
+#https:
+#    proxyHost: TODO
+#    proxyPort: TODO
