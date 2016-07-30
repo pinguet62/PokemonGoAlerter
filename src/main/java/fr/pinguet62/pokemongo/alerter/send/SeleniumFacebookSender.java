@@ -49,6 +49,9 @@ public class SeleniumFacebookSender implements Sender {
     @Value("${facebook.password}")
     private String password;
 
+    @Value("${facebook.target}")
+    private String target;
+
     @PostConstruct
     private void login() {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
@@ -64,7 +67,7 @@ public class SeleniumFacebookSender implements Sender {
         debug(driver);
 
         // Go to chat
-        driver.get("https://www.facebook.com/messages/pinguet62");
+        driver.get("https://www.facebook.com/messages/" + target);
         debug(driver);
 
         // Hide popup: notification authorization

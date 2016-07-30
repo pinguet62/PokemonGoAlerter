@@ -2,6 +2,7 @@
 facebook:
     email: TODO
     password: TODO
+    target: TODO
 
 # Proxy
 #http:
