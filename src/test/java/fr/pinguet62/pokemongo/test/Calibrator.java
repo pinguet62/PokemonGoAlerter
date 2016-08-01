@@ -8,17 +8,17 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.pinguet62.pokemongo.Program;
-import fr.pinguet62.pokemongo.api.WebserviceClient;
-import fr.pinguet62.pokemongo.api.dto.PokemonDto;
+import fr.pinguet62.pokemongo.api.Reader;
+import fr.pinguet62.pokemongo.api.pokevision.PokevisionApi;
+import fr.pinguet62.pokemongo.api.pokevision.dto.PokemonDto;
 import fr.pinguet62.pokemongo.model.Position;
 
-/** Calcul du rayon moyen de scan de l'API. */
+/** Calculate the average radius of {@link Reader}. */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Program.class)
 public class Calibrator {
@@ -37,9 +37,9 @@ public class Calibrator {
     }
 
     @Inject
-    private WebserviceClient client;
+    private PokevisionApi client;
 
-    @Test
+    // @Test
     public void test_echantillon() {
         int nb = 10;
         // Londre
@@ -51,7 +51,7 @@ public class Calibrator {
 
         List<Double> values = new ArrayList<>();
         eachIntervalle(x, y, nb, position -> {
-            List<PokemonDto> pokemons = client.getData(position).getPokemon();
+            List<PokemonDto> pokemons = client.call(position).getPokemon();
             double distanceMax = maxRadius(pokemons, position);
             values.add(distanceMax);
         });

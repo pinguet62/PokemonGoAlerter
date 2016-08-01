@@ -1,4 +1,4 @@
-package fr.pinguet62.pokemongo.api.dto;
+package fr.pinguet62.pokemongo.api.pokevision.dto;
 
 import java.util.List;
 

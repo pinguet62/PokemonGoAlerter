@@ -3,10 +3,11 @@ package fr.pinguet62.pokemongo.model;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
-
-import com.google.common.base.Objects;
+import java.util.stream.Stream;
 
 public class Zone {
 
@@ -19,9 +20,11 @@ public class Zone {
      *
      * @param zones The {@link Zone}s.
      * @param interval The length of one side of the square.
-     * @param action The {@link Consumer} to execute on current {@link Position}.
+     * @return A {@link Stream} with each {@link Position}.
      */
-    public static final void crissCross(List<Zone> zones, double interval, Consumer<Position> action) {
+    public static final Stream<Position> crissCross2(List<Zone> zones, double interval) {
+        List<Position> positions = new ArrayList<>();
+
         double minLatitude = zones.stream().map(z -> z.bottomLeft).map(Position::getLatitude)
                 .mapToDouble(Double::doubleValue).min().getAsDouble();
         double maxLatitude = zones.stream().map(z -> z.topRight).map(Position::getLatitude)
@@ -30,6 +33,7 @@ public class Zone {
                 .mapToDouble(Double::doubleValue).min().getAsDouble();
         double maxLongitude = zones.stream().map(z -> z.topRight).map(Position::getLongitude)
                 .mapToDouble(Double::doubleValue).max().getAsDouble();
+
         for (double latitude = minLatitude + (interval / 2); latitude
                 - (interval / 2) < maxLatitude; latitude += interval)
             for (double longitude = minLongitude + (interval / 2); longitude
@@ -44,19 +48,25 @@ public class Zone {
                                         z.topRight.getLongitude() + interval / 2)))
                     continue;
 
-                action.accept(position);
+                positions.add(position);
             }
+
+        return positions.stream();
     }
 
-    // min latitude & longitude
+    /** {@link Position} with minimum latitude & longitude. */
     final Position bottomLeft;
 
-    // max latitude & longitude
     private final String name;
 
+    /** {@link Position} with maximum latitude & longitude. */
     final Position topRight;
 
-    public Zone(String name, Position x, Position y) {
+    public Zone(Position x, Position y) {
+        this(x, y, null);
+    }
+
+    public Zone(Position x, Position y, String name) {
         this.name = name;
         bottomLeft = new Position(min(x.getLatitude(), y.getLatitude()), min(x.getLongitude(), y.getLongitude()));
         topRight = new Position(max(x.getLatitude(), y.getLatitude()), max(x.getLongitude(), y.getLongitude()));
@@ -75,7 +85,7 @@ public class Zone {
         if (!(obj instanceof Zone))
             return false;
         Zone other = (Zone) obj;
-        return Objects.equal(bottomLeft, other.bottomLeft) && Objects.equal(topRight, other.topRight);
+        return Objects.equals(bottomLeft, other.bottomLeft) && Objects.equals(topRight, other.topRight);
     }
 
     public String getName() {
@@ -84,7 +94,7 @@ public class Zone {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(bottomLeft, topRight);
+        return Objects.hash(bottomLeft, topRight);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package fr.pinguet62.pokemongo;
 
-import static fr.pinguet62.pokemongo.config.Configuration.COORDINATES_INTERVAL;
-import static java.lang.Math.sqrt;
+import static fr.pinguet62.pokemongo.Configuration.CRISSCROSS_INTERVAL;
 import static org.slf4j.LoggerFactory.getLogger;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -11,15 +13,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import fr.pinguet62.pokemongo.alerter.Message;
-import fr.pinguet62.pokemongo.alerter.send.Sender;
-import fr.pinguet62.pokemongo.api.WebserviceClient;
-import fr.pinguet62.pokemongo.api.dto.PokemonDto;
-import fr.pinguet62.pokemongo.api.dto.ResultDto;
-import fr.pinguet62.pokemongo.config.Preferencies;
-import fr.pinguet62.pokemongo.model.Pokemon;
-import fr.pinguet62.pokemongo.model.Position;
+import fr.pinguet62.pokemongo.api.Reader;
+import fr.pinguet62.pokemongo.model.Appearance;
 import fr.pinguet62.pokemongo.model.Zone;
+import fr.pinguet62.pokemongo.preferencies.Preferencies;
 
 @Component
 @EnableScheduling
@@ -28,45 +25,26 @@ public class Task {
     private static final Logger LOGGER = getLogger(Task.class);
 
     @Inject
-    private Cache cache;
+    private List<Filter> filters;
 
     @Inject
-    private WebserviceClient client;
+    private List<Handler> handlers;
 
     @Inject
     private Preferencies preferencies;
 
     @Inject
-    private Sender sender;
+    private Reader reader;
 
     @Scheduled(fixedDelay = 10_000)
     public void check2() {
         LOGGER.info("New schedule...");
-        Zone.crissCross(preferencies.getZones(), sqrt(2) * COORDINATES_INTERVAL, pos -> {
-            ResultDto result = client.getData(pos);
-            if (result.getPokemon().isEmpty())
-                LOGGER.debug("... no result!");
 
-            for (PokemonDto pokemonDto : result.getPokemon()) {
-                Pokemon pokemon = Pokemon.fromId(pokemonDto.getPokemonId());
-                if (pokemon.getImportance().compareTo(preferencies.getMinimumLevel()) < 0) // Filter: only importants
-                    continue;
+        Filter allFilters = filters.stream().reduce(Filter::and).orElse(t -> true);
+        Consumer<Appearance> allHandler = app -> handlers.stream().forEach(hdl -> hdl.accept(app));
 
-                Position position = new Position(pokemonDto.getLatitude(), pokemonDto.getLongitude());
-
-                if (cache.contains(pokemonDto)) // Filter: single notification
-                    continue;
-                cache.add(pokemonDto);
-
-                // Sub-zone
-                Zone subZone = preferencies.getZones().stream().filter(z -> z.contains(position)).findFirst()
-                        .orElse(null);
-                if (subZone == null) // Filter: personal zone
-                    continue;
-
-                Message message = new Message(pokemon, subZone, pokemonDto.getExpiration_time(), position);
-                sender.send(message);
-            }
+        Zone.crissCross2(preferencies.getZones(), CRISSCROSS_INTERVAL).forEach(pos -> {
+            reader.get(pos).stream().filter(allFilters).forEach(allHandler);
         });
     }
 

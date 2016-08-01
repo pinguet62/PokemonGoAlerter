@@ -4,6 +4,17 @@
 
 La liste des zones (couple de coordonnées) est définie dans la classe `fr.pinguet62.pokemongo.config.Preferencies`.
 
+## Message
+
+Les messages envoyés sont de cette forme :
+
+```
+Minidraco
+End: 08:21:36
+Zone: Citadelle
+http://maps.google.com/maps?q=50.6379695,3.0502286
+```
+
 ## Notification
 
 ### Implémentation par défaut
@@ -13,13 +24,11 @@ Il faut donc configurer un aure compte que celui cible.
 
 La configuration des identifiants se fait dans le fichier `application.yml`.
 
-### Déboguage
-
-Le bean `fr.pinguet62.pokemongo.alerter.send.SysoutSender` permet d'afficher les messages dans la console durant les tests.
-
 ### Notification personnalisée
 
-Implémenter son **@Bean** implémentant : `fr.pinguet62.pokemongo.alerter.send.Sender`
+Il est possible de créer ses propres systèmes de notification.
+
+Il faut pour cela créer les **@Bean** implémentant l'interface : `fr.pinguet62.pokemongo.notification.Sender`.
 
 ## Niveau d'alert
 
