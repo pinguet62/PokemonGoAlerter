@@ -14,8 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.pinguet62.pokemongo.Program;
 import fr.pinguet62.pokemongo.api.Reader;
-import fr.pinguet62.pokemongo.api.pokevision.PokevisionApi;
-import fr.pinguet62.pokemongo.api.pokevision.dto.PokemonDto;
+import fr.pinguet62.pokemongo.model.Appearance;
 import fr.pinguet62.pokemongo.model.Position;
 
 /** Calculate the average radius of {@link Reader}. */
@@ -31,13 +30,13 @@ public class Calibrator {
         }
     }
 
-    private static double maxRadius(List<PokemonDto> pokemons, Position currentPosition) {
-        return pokemons.stream().map(pokemon -> new Position(pokemon.getLatitude(), pokemon.getLongitude()))
+    private static double maxRadius(List<Appearance> appearances, Position currentPosition) {
+        return appearances.stream().map(Appearance::getPosition)
                 .mapToDouble(position -> distance(currentPosition, position)).max().getAsDouble();
     }
 
     @Inject
-    private PokevisionApi client;
+    private Reader reader;
 
     // @Test
     public void test_echantillon() {
@@ -51,14 +50,11 @@ public class Calibrator {
 
         List<Double> values = new ArrayList<>();
         eachIntervalle(x, y, nb, position -> {
-            List<PokemonDto> pokemons = client.call(position).getPokemon();
-            double distanceMax = maxRadius(pokemons, position);
+            List<Appearance> appearances = reader.get(position);
+            double distanceMax = maxRadius(appearances, position);
             values.add(distanceMax);
         });
         values.stream().forEach(System.out::println);
-        System.out.println("AVG: " + values.stream().mapToDouble(Double::doubleValue).average().getAsDouble()); // Rayon
-                                                                                                                // moyen
-                                                                                                                // de
-                                                                                                                // 1km
+        System.out.println("AVG: " + values.stream().mapToDouble(Double::doubleValue).average().getAsDouble());
     }
 }

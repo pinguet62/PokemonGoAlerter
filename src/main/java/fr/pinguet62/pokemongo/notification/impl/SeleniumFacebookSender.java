@@ -17,12 +17,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import fr.pinguet62.pokemongo.model.Appearance;
 import fr.pinguet62.pokemongo.notification.Sender;
 
 /** Send message to Facebook messanger, using Selenium. */
-// @Component
+@Component
 public class SeleniumFacebookSender implements Sender {
 
     private static final Logger LOGGER = getLogger(SeleniumFacebookSender.class);

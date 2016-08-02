@@ -1,6 +1,5 @@
 package fr.pinguet62.pokemongo;
 
-import static fr.pinguet62.pokemongo.Configuration.CRISSCROSS_INTERVAL;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class Task {
         Filter allFilters = filters.stream().reduce(Filter::and).orElse(t -> true);
         Consumer<Appearance> allHandler = app -> handlers.stream().forEach(hdl -> hdl.accept(app));
 
-        Zone.crissCross2(preferencies.getZones(), CRISSCROSS_INTERVAL).forEach(pos -> {
+        Zone.crissCross(preferencies.getZones(), reader.getInterval()).forEach(pos -> {
             reader.get(pos).stream().filter(allFilters).forEach(allHandler);
         });
     }

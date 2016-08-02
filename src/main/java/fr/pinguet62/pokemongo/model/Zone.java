@@ -22,7 +22,7 @@ public class Zone {
      * @param interval The length of one side of the square.
      * @return A {@link Stream} with each {@link Position}.
      */
-    public static final Stream<Position> crissCross2(List<Zone> zones, double interval) {
+    public static final Stream<Position> crissCross(List<Zone> zones, double interval) {
         List<Position> positions = new ArrayList<>();
 
         double minLatitude = zones.stream().map(z -> z.bottomLeft).map(Position::getLatitude)

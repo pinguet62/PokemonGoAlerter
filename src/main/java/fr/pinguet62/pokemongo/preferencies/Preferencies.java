@@ -27,6 +27,8 @@ public class Preferencies {
                 new Zone(new Position(50.628396, 3.067708), new Position(50.624323, 3.070197),
                         "Parc Jean-Baptiste Lebas"),
                 new Zone(new Position(50.642611, 3.062725), new Position(50.640664, 3.065490), "Australian Bar"),
+                new Zone(new Position(50.632848, 3.058172), new Position(50.628267, 3.066184),
+                        "Place de la République"),
                 new Zone(new Position(50.616288, 3.062421), new Position(50.613762, 3.072360), "Jardin des plantes"),
                 new Zone(new Position(50.642191, 3.074965), new Position(50.638017, 3.070101), "Parc Henri Matisse"),
                 new Zone(new Position(50.634516, 3.069057), new Position(50.640156, 3.080119), "Gares"),

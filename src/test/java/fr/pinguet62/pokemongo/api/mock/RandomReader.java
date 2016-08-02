@@ -1,6 +1,5 @@
 package fr.pinguet62.pokemongo.api.mock;
 
-import static fr.pinguet62.pokemongo.Configuration.SCAN_RADIUS_DEGREE;
 import static java.lang.Math.random;
 import static java.util.Calendar.MINUTE;
 import static java.util.Calendar.SECOND;
@@ -22,15 +21,15 @@ import fr.pinguet62.pokemongo.model.Position;
 
 /** A {@link Reader} used for testing: return random {@link Appearance}. */
 @Component
-@Primary
+@Primary // Mock
 public class RandomReader implements Reader {
 
     @Override
     public List<Appearance> get(Position centerPosition) {
         Pokemon pokemon = Pokemon.values()[(int) (random() * Pokemon.values().length)];
 
-        Position position = new Position(random() * SCAN_RADIUS_DEGREE + centerPosition.getLatitude(),
-                random() * SCAN_RADIUS_DEGREE + centerPosition.getLatitude());
+        Position position = new Position(random() + centerPosition.getLatitude(),
+                random() + centerPosition.getLatitude());
 
         Calendar calendar = getInstance();
         calendar.add(MINUTE, (int) (15 * random()));
@@ -39,6 +38,11 @@ public class RandomReader implements Reader {
 
         return range(0, (int) (10 * random())).mapToObj(x -> new Appearance(pokemon, position, expiration))
                 .collect(toList());
+    }
+
+    @Override
+    public double getInterval() {
+        return 1;
     }
 
 }
