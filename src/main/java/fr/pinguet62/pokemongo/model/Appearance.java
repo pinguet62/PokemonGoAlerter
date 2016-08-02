@@ -1,5 +1,8 @@
 package fr.pinguet62.pokemongo.model;
 
+import static java.lang.System.lineSeparator;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -56,6 +59,16 @@ public class Appearance {
 
     public void setZone(Zone zone) {
         this.zone = zone;
+    }
+
+    // TODO Formatter
+    @Override
+    public String toString() {
+        String message = pokemon.getName() + lineSeparator();
+        message += "End: " + new SimpleDateFormat("HH:mm:ss").format(expiration) + lineSeparator();
+        message += "Zone: " + zone.getName() + lineSeparator();
+        message += position.getUrl();
+        return message;
     }
 
 }

@@ -1,22 +1,16 @@
 package fr.pinguet62.pokemongo.preferencies;
 
-import static fr.pinguet62.pokemongo.model.Importance.HIGH;
 import static java.util.Arrays.asList;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import fr.pinguet62.pokemongo.model.Importance;
 import fr.pinguet62.pokemongo.model.Position;
 import fr.pinguet62.pokemongo.model.Zone;
 
 @Component
 public class Preferencies {
-
-    public Importance getMinimumLevel() {
-        return HIGH;
-    }
 
     public List<Zone> getZones() {
         return asList(
