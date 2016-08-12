@@ -1,4 +1,4 @@
-package fr.pinguet62.pokemongo.api.lillepokemap;
+package fr.pinguet62.pokemongo.api.otherlille;
 
 import static java.util.stream.Collectors.toList;
 
@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.ws.rs.client.ClientBuilder;
 
+import org.springframework.stereotype.Component;
+
 import fr.pinguet62.pokemongo.api.Reader;
-import fr.pinguet62.pokemongo.api.lillepokemap.dto.PokemonDto;
-import fr.pinguet62.pokemongo.api.lillepokemap.dto.ResultDto;
+import fr.pinguet62.pokemongo.api.otherlille.dto.PokemonDto;
+import fr.pinguet62.pokemongo.api.otherlille.dto.ResultDto;
 import fr.pinguet62.pokemongo.model.Appearance;
 import fr.pinguet62.pokemongo.model.Pokemon;
 import fr.pinguet62.pokemongo.model.Position;
@@ -16,10 +18,10 @@ import fr.pinguet62.pokemongo.model.Position;
 /**
  * Scan only Lille.
  *
- * @see <a href="http://lillepokemap.ddns.net">Web site</a>
+ * @see <a href="http://91.121.136.137:5004/">Web site</a>
  */
-// @Component
-public class LillePokeMapReader implements Reader {
+@Component
+public class TestReader implements Reader {
 
     /**
      * Convert data from DTO to application model.
@@ -50,7 +52,7 @@ public class LillePokeMapReader implements Reader {
                 .request()
                     .get(ResultDto.class)
                         .getPokemons().stream()
-                            .map(LillePokeMapReader::dtoToModel)
+                            .map(TestReader::dtoToModel)
                             .collect(toList());
         // @formatter:on
     }
