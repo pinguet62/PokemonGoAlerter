@@ -1,8 +1,13 @@
 # Pokemon GO alerter
 
+[![Build Status](https://travis-ci.org/pinguet62/PokemonGoAlerter.svg?branch=master)](https://travis-ci.org/pinguet62/PokemonGoAlerter)
+
 ## Zones à scanner
 
-La liste des zones (couple de coordonnées) est définie dans la classe `fr.pinguet62.pokemongo.config.Preferencies`.
+La liste des zones (couple de coordonnées) est définie dans la classe `fr.pinguet62.pokemongo.config.Preferencies`.  
+La zone totale à couvrir est représentée par l'ensemble des `Zone` constitué d'un couple de `Position`. Ils sont nommés afin d'avoir un détail dans la notification.
+
+Parce que toute la zone ne peut pas être scannée en entier, la zone totale est scannée par morceaux. Voir méthode `Zone::crissCross()`.
 
 ## Message
 

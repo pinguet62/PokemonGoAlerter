@@ -1,0 +1,4 @@
+# https://travis-ci.org/pinguet62/PokemonGoAlerter
+
+language: java
+jdk: oraclejdk8
